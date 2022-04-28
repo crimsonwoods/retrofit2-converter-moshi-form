@@ -84,7 +84,7 @@ class MoshiFormRequestBodyConverter<T : Any>(
                             nextObject(names)
                         }
                         JsonReader.Token.BEGIN_ARRAY -> {
-                            TODO("Support array")
+                            nextArray(names)
                         }
                         JsonReader.Token.END_ARRAY,
                         JsonReader.Token.END_OBJECT,
@@ -113,6 +113,52 @@ class MoshiFormRequestBodyConverter<T : Any>(
         } while (peek() != JsonReader.Token.END_OBJECT)
 
         endObject()
+
+        return entireEntries.flatten()
+    }
+
+    private fun JsonReader.nextArray(ancestors: List<String>): List<Entry> {
+        val entireEntries = mutableListOf<List<Entry>>()
+
+        beginArray()
+
+        var index = 0
+        do {
+            val entries = when (checkNotNull(peek())) {
+                JsonReader.Token.NAME -> {
+                    throw JsonDataException("Unexpected token is detected.")
+                }
+                JsonReader.Token.BEGIN_ARRAY -> {
+                    nextArray(ancestors = ancestors + index.toString(radix = 10))
+                }
+                JsonReader.Token.BEGIN_OBJECT -> {
+                    nextObject(ancestors = ancestors + index.toString(radix = 10))
+                }
+                JsonReader.Token.STRING -> {
+                    listOf(Entry(name = ancestors.name(), value = nextString()))
+                }
+                JsonReader.Token.NUMBER -> {
+                    listOf(Entry(name = ancestors.name(), value = nextLong().toString()))
+                }
+                JsonReader.Token.BOOLEAN -> {
+                    listOf(Entry(name = ancestors.name(), value = nextBoolean().toString()))
+                }
+                JsonReader.Token.NULL -> {
+                    listOf(Entry(name = ancestors.name(), value = nextNull<Any>().toString()))
+                }
+                JsonReader.Token.END_OBJECT,
+                JsonReader.Token.END_ARRAY,
+                JsonReader.Token.END_DOCUMENT -> {
+                    throw JsonDataException("Unexpected token is detected.")
+                }
+            }
+
+            entireEntries.add(entries)
+
+            index++
+        } while (peek() != JsonReader.Token.END_ARRAY)
+
+        endArray()
 
         return entireEntries.flatten()
     }
