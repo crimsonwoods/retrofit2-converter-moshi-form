@@ -122,22 +122,20 @@ class MoshiFormRequestBodyConverter<T : Any>(
 
         beginArray()
 
-        var index = 0
+        var counter = 0
         do {
+            val index = counter.toString(radix = 10)
             val entries = when (checkNotNull(peek())) {
-                JsonReader.Token.NAME -> {
-                    throw JsonDataException("Unexpected token is detected.")
-                }
                 JsonReader.Token.BEGIN_ARRAY -> {
-                    nextArray(ancestors = ancestors + index.toString(radix = 10))
+                    nextArray(ancestors = ancestors + index)
                 }
                 JsonReader.Token.BEGIN_OBJECT -> {
-                    nextObject(ancestors = ancestors + index.toString(radix = 10))
+                    nextObject(ancestors = ancestors + index)
                 }
                 JsonReader.Token.STRING -> {
                     listOf(
                         Entry(
-                            name = (ancestors + index.toString(radix = 10)).name(),
+                            name = (ancestors + index).name(),
                             value = nextString()
                         )
                     )
@@ -145,7 +143,7 @@ class MoshiFormRequestBodyConverter<T : Any>(
                 JsonReader.Token.NUMBER -> {
                     listOf(
                         Entry(
-                            name = (ancestors + index.toString(radix = 10)).name(),
+                            name = (ancestors + index).name(),
                             value = nextLong().toString()
                         )
                     )
@@ -153,7 +151,7 @@ class MoshiFormRequestBodyConverter<T : Any>(
                 JsonReader.Token.BOOLEAN -> {
                     listOf(
                         Entry(
-                            name = (ancestors + index.toString(radix = 10)).name(),
+                            name = (ancestors + index).name(),
                             value = nextBoolean().toString()
                         )
                     )
@@ -161,11 +159,12 @@ class MoshiFormRequestBodyConverter<T : Any>(
                 JsonReader.Token.NULL -> {
                     listOf(
                         Entry(
-                            name = (ancestors + index.toString(radix = 10)).name(),
+                            name = (ancestors + index).name(),
                             value = nextNull<Any>().toString()
                         )
                     )
                 }
+                JsonReader.Token.NAME,
                 JsonReader.Token.END_OBJECT,
                 JsonReader.Token.END_ARRAY,
                 JsonReader.Token.END_DOCUMENT -> {
@@ -175,7 +174,7 @@ class MoshiFormRequestBodyConverter<T : Any>(
 
             entireEntries.add(entries)
 
-            index++
+            counter++
         } while (peek() != JsonReader.Token.END_ARRAY)
 
         endArray()
