@@ -135,16 +135,36 @@ class MoshiFormRequestBodyConverter<T : Any>(
                     nextObject(ancestors = ancestors + index.toString(radix = 10))
                 }
                 JsonReader.Token.STRING -> {
-                    listOf(Entry(name = ancestors.name(), value = nextString()))
+                    listOf(
+                        Entry(
+                            name = (ancestors + index.toString(radix = 10)).name(),
+                            value = nextString()
+                        )
+                    )
                 }
                 JsonReader.Token.NUMBER -> {
-                    listOf(Entry(name = ancestors.name(), value = nextLong().toString()))
+                    listOf(
+                        Entry(
+                            name = (ancestors + index.toString(radix = 10)).name(),
+                            value = nextLong().toString()
+                        )
+                    )
                 }
                 JsonReader.Token.BOOLEAN -> {
-                    listOf(Entry(name = ancestors.name(), value = nextBoolean().toString()))
+                    listOf(
+                        Entry(
+                            name = (ancestors + index.toString(radix = 10)).name(),
+                            value = nextBoolean().toString()
+                        )
+                    )
                 }
                 JsonReader.Token.NULL -> {
-                    listOf(Entry(name = ancestors.name(), value = nextNull<Any>().toString()))
+                    listOf(
+                        Entry(
+                            name = (ancestors + index.toString(radix = 10)).name(),
+                            value = nextNull<Any>().toString()
+                        )
+                    )
                 }
                 JsonReader.Token.END_OBJECT,
                 JsonReader.Token.END_ARRAY,

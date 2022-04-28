@@ -44,7 +44,14 @@ class ArrayDataTest {
 
         service.addItems(
             userId = UserId(1),
-            items = listOf(Item(id = 1, name = "item1", description = "1st item")),
+            items = listOf(
+                Item(
+                    id = 1,
+                    name = "item1",
+                    description = "1st item",
+                    elements = listOf("fire", "wind", "water"),
+                )
+            ),
         )
 
         assertEquals(1, mockWebServer.requestCount)
@@ -57,6 +64,9 @@ class ArrayDataTest {
                 """${"items[0][id]".encode()}=1""",
                 """${"items[0][name]".encode()}=item1""",
                 """${"items[0][description]".encode()}=${"1st item".encode()}""",
+                """${"items[0][elements][0]".encode()}=fire""",
+                """${"items[0][elements][1]".encode()}=wind""",
+                """${"items[0][elements][2]".encode()}=water""",
             ),
             actual.body.readUtf8().split('&')
         )
