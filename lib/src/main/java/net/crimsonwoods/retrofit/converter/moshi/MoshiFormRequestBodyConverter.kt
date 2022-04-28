@@ -54,7 +54,7 @@ class MoshiFormRequestBodyConverter<T : Any>(
         return this
     }
 
-    private fun JsonReader.nextObject(ancestors: List<Entry>): List<Entry> {
+    private fun JsonReader.nextObject(ancestors: List<String>): List<Entry> {
         val entireEntries = mutableListOf<List<Entry>>()
 
         beginObject()
@@ -62,26 +62,26 @@ class MoshiFormRequestBodyConverter<T : Any>(
         do {
             val entries = when (checkNotNull(peek())) {
                 JsonReader.Token.NAME -> {
-                    val name = nextName()
+                    val names = ancestors + nextName()
                     when (checkNotNull(peek())) {
                         JsonReader.Token.BOOLEAN -> {
                             val value = nextBoolean()
-                            listOf(Entry(name = name, value = value.toString()))
+                            listOf(Entry(name = names.name(), value = value.toString()))
                         }
                         JsonReader.Token.NUMBER -> {
                             val value = nextLong()
-                            listOf(Entry(name = name, value = value.toString()))
+                            listOf(Entry(name = names.name(), value = value.toString()))
                         }
                         JsonReader.Token.STRING -> {
                             val value = nextString()
-                            listOf(Entry(name = name, value = value))
+                            listOf(Entry(name = names.name(), value = value))
                         }
                         JsonReader.Token.NULL -> {
                             val value = nextNull<Any?>()
-                            listOf(Entry(name = name, value = value.toString()))
+                            listOf(Entry(name = names.name(), value = value.toString()))
                         }
                         JsonReader.Token.BEGIN_OBJECT -> {
-                            TODO("Support nested object")
+                            nextObject(names)
                         }
                         JsonReader.Token.BEGIN_ARRAY -> {
                             TODO("Support array")
@@ -115,6 +115,16 @@ class MoshiFormRequestBodyConverter<T : Any>(
         endObject()
 
         return entireEntries.flatten()
+    }
+
+    private fun List<String>.name(): String {
+        return mapIndexed { index, s ->
+            if (index == 0) {
+                s
+            } else {
+                "[$s]"
+            }
+        }.joinToString(separator = "")
     }
 
     private data class Entry(
