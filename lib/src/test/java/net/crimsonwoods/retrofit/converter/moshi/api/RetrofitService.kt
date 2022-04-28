@@ -20,6 +20,9 @@ class RetrofitService(
 
         @PUT("/user")
         suspend fun updateUser(@Body @Form request: UpdateUserRequest)
+
+        @POST("/favorite")
+        suspend fun createFavorite(@Body @Form request: Favorite)
     }
 
     private val service = Retrofit.Builder()
@@ -40,6 +43,21 @@ class RetrofitService(
                 name = name,
                 age = age,
                 rank = rank,
+            )
+        )
+    }
+
+    suspend fun createFavorite(name: String) {
+        service.createFavorite(
+            Favorite(
+                name = name,
+                webSiteUrl = "https://www.example.com",
+                place = Favorite.Place(
+                    name = "test-place",
+                    location = Favorite.Location(0.0, 0.0),
+                ),
+                address = "東京都",
+                note = "",
             )
         )
     }
