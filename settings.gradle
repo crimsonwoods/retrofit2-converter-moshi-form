@@ -13,5 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "retrofit2-converter-moshi-form"
-include ':app'
 include ':lib'
