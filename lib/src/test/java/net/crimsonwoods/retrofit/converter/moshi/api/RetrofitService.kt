@@ -9,6 +9,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Path
 
 class RetrofitService(
     url: HttpUrl,
@@ -23,6 +24,9 @@ class RetrofitService(
 
         @POST("/favorite")
         suspend fun createFavorite(@Body @Form request: Favorite)
+
+        @PUT("/user/{id}/items")
+        suspend fun addItems(@Path("id") id: UserId, @Body @Form request: AddItemsRequest)
     }
 
     private val service = Retrofit.Builder()
@@ -60,5 +64,9 @@ class RetrofitService(
                 note = "",
             )
         )
+    }
+
+    suspend fun addItems(userId: UserId, items: List<Item>) {
+        service.addItems(id = userId, request = AddItemsRequest(items = items))
     }
 }

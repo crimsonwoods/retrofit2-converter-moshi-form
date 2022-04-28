@@ -2,17 +2,17 @@ package net.crimsonwoods.retrofit.converter.moshi.api
 
 import com.squareup.moshi.*
 
-data class UserId(
+data class ItemId(
     private val rawValue: Int,
 ) {
-    object Adapter : JsonAdapter<UserId>() {
+    object Adapter : JsonAdapter<ItemId>() {
         @FromJson
-        override fun fromJson(reader: JsonReader): UserId {
-            return UserId(reader.nextInt())
+        override fun fromJson(reader: JsonReader): ItemId {
+            return ItemId(reader.nextInt())
         }
 
         @ToJson
-        override fun toJson(writer: JsonWriter, value: UserId?) {
+        override fun toJson(writer: JsonWriter, value: ItemId?) {
             if (value == null) {
                 writer.nullValue()
             } else {
@@ -20,6 +20,4 @@ data class UserId(
             }
         }
     }
-
-    override fun toString(): String = rawValue.toString()
 }
