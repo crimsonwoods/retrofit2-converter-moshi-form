@@ -30,17 +30,22 @@ class MoshiFormConverterFactory private constructor(
     private val lenient: Boolean,
     private val failOnUnknown: Boolean,
     private val serializeNulls: Boolean,
+    private val hasArrayIndex: Boolean,
 ) : Converter.Factory() {
     fun asLenient(): MoshiFormConverterFactory {
-        return MoshiFormConverterFactory(moshi, true, failOnUnknown, serializeNulls)
+        return MoshiFormConverterFactory(moshi, true, failOnUnknown, serializeNulls, hasArrayIndex)
     }
 
     fun failOnUnknown(): MoshiFormConverterFactory {
-        return MoshiFormConverterFactory(moshi, lenient, true, serializeNulls)
+        return MoshiFormConverterFactory(moshi, lenient, true, serializeNulls, hasArrayIndex)
     }
 
     fun withNullSerialization(): MoshiFormConverterFactory {
-        return MoshiFormConverterFactory(moshi, lenient, failOnUnknown, true)
+        return MoshiFormConverterFactory(moshi, lenient, failOnUnknown, true, hasArrayIndex)
+    }
+
+    fun withArrayIndex(): MoshiFormConverterFactory {
+        return MoshiFormConverterFactory(moshi, lenient, failOnUnknown, serializeNulls, true)
     }
 
     override fun requestBodyConverter(
@@ -69,7 +74,7 @@ class MoshiFormConverterFactory private constructor(
         if (serializeNulls) {
             adapter = adapter.serializeNulls()
         }
-        return MoshiFormRequestBodyConverter(adapter)
+        return MoshiFormRequestBodyConverter(adapter, hasArrayIndex = hasArrayIndex)
     }
 
     companion object {
@@ -80,7 +85,8 @@ class MoshiFormConverterFactory private constructor(
                 moshi = moshi,
                 lenient = false,
                 failOnUnknown = false,
-                serializeNulls = false
+                serializeNulls = false,
+                hasArrayIndex = false,
             )
         }
 

@@ -11,6 +11,7 @@ import retrofit2.Converter
 
 class MoshiFormRequestBodyConverter<T : Any>(
     private val adapter: JsonAdapter<T>,
+    private val hasArrayIndex: Boolean,
 ) : Converter<T, RequestBody> {
     /**
      * Converts data class to JSON, and converts JSON to form data format.
@@ -124,7 +125,11 @@ class MoshiFormRequestBodyConverter<T : Any>(
 
         var counter = 0
         do {
-            val index = counter.toString(radix = 10)
+            val index = if (hasArrayIndex) {
+                counter.toString(radix = 10)
+            } else {
+                ""
+            }
             val entries = when (checkNotNull(peek())) {
                 JsonReader.Token.BEGIN_ARRAY -> {
                     nextArray(ancestors = ancestors + index)

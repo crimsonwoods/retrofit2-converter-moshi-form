@@ -61,12 +61,12 @@ class ArrayDataTest {
         assertEquals("application/x-www-form-urlencoded", actual.headers["Content-Type"])
         assertEquals(
             listOf(
-                """${"items[0][id]".encode()}=1""",
-                """${"items[0][name]".encode()}=item1""",
-                """${"items[0][description]".encode()}=${"1st item".encode()}""",
-                """${"items[0][elements][0]".encode()}=fire""",
-                """${"items[0][elements][1]".encode()}=wind""",
-                """${"items[0][elements][2]".encode()}=water""",
+                """${"items[][id]".encode()}=1""",
+                """${"items[][name]".encode()}=item1""",
+                """${"items[][description]".encode()}=${"1st item".encode()}""",
+                """${"items[][elements][]".encode()}=fire""",
+                """${"items[][elements][]".encode()}=wind""",
+                """${"items[][elements][]".encode()}=water""",
             ),
             actual.body.readUtf8().split('&')
         )
