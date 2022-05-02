@@ -7,6 +7,24 @@ Converter uses Moshi[^2] for serialization to form-urlencoded type request body.
 
 ## Setup
 
+Adds the JitPack repository to your `build.gradle`:
+
+```Groovy
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+Adds the dependency on this library to your `app/build.gradle`:
+
+```Groovy
+dependencies {
+    implementation 'com.github.crimsonwoods:retrofit2-converter-moshi-form:$latest_version'
+}
+```
+
 ## Usage
 
 Adds an instance of `MoshiFormConverterFactory` to `Retrofit.Builder` parameter like below:
