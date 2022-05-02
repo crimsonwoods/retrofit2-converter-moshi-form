@@ -2,7 +2,6 @@ package net.crimsonwoods.retrofit.converter.moshi
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.squareup.moshi.Moshi
-import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.runBlocking
 import net.crimsonwoods.retrofit.converter.moshi.api.RetrofitService
 import net.crimsonwoods.retrofit.converter.moshi.api.UserId
@@ -10,6 +9,7 @@ import net.crimsonwoods.retrofit.converter.moshi.api.UserRank
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
