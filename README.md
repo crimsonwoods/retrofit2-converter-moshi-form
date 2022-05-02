@@ -1,4 +1,4 @@
-Converter for form request
+Converter for form request [![Check](https://github.com/crimsonwoods/retrofit2-converter-moshi-form/actions/workflows/check.yml/badge.svg?branch=main)](https://github.com/crimsonwoods/retrofit2-converter-moshi-form/actions/workflows/check.yml)
 =====
 
 This library provides a Converter used for Retrofit2[^1].
