@@ -130,17 +130,22 @@ class MoshiFormRequestBodyConverter<T : Any>(
             } else {
                 ""
             }
+            val name = if (ancestors.isEmpty()) {
+                "[$index]"
+            } else {
+                index
+            }
             val entries = when (checkNotNull(peek())) {
                 JsonReader.Token.BEGIN_ARRAY -> {
-                    nextArray(ancestors = ancestors + index)
+                    nextArray(ancestors = ancestors + name)
                 }
                 JsonReader.Token.BEGIN_OBJECT -> {
-                    nextObject(ancestors = ancestors + index)
+                    nextObject(ancestors = ancestors + name)
                 }
                 JsonReader.Token.STRING -> {
                     listOf(
                         Entry(
-                            name = (ancestors + index).name(),
+                            name = (ancestors + name).name(),
                             value = nextString()
                         )
                     )
@@ -148,7 +153,7 @@ class MoshiFormRequestBodyConverter<T : Any>(
                 JsonReader.Token.NUMBER -> {
                     listOf(
                         Entry(
-                            name = (ancestors + index).name(),
+                            name = (ancestors + name).name(),
                             value = nextLong().toString()
                         )
                     )
@@ -156,7 +161,7 @@ class MoshiFormRequestBodyConverter<T : Any>(
                 JsonReader.Token.BOOLEAN -> {
                     listOf(
                         Entry(
-                            name = (ancestors + index).name(),
+                            name = (ancestors + name).name(),
                             value = nextBoolean().toString()
                         )
                     )
@@ -164,7 +169,7 @@ class MoshiFormRequestBodyConverter<T : Any>(
                 JsonReader.Token.NULL -> {
                     listOf(
                         Entry(
-                            name = (ancestors + index).name(),
+                            name = (ancestors + name).name(),
                             value = nextNull<Any>().toString()
                         )
                     )
