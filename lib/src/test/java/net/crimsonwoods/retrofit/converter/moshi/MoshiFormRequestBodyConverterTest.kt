@@ -23,6 +23,7 @@ class MoshiFormRequestBodyConverterTest {
         val actual = converter.convert(arrayOf("012", "abcdefg"))
         assertNotNull(actual)
         assertTrue(actual is FormBody)
+        assertEquals(2, actual.size)
         assertEquals("[]", actual.name(0))
         assertEquals("012", actual.value(0))
         assertEquals("[]", actual.name(1))
