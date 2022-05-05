@@ -14,7 +14,7 @@ class MoshiFormRequestBodyConverterTest {
     private val moshi = Moshi.Builder().build()
 
     @Test
-    fun test() {
+    fun arrayOnly() {
         val converter = MoshiFormRequestBodyConverter(
             adapter = moshi.adapter(Array<String>::class.java),
             hasArrayIndex = false,
