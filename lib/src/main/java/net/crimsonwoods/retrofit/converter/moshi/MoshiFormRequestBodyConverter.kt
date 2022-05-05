@@ -9,7 +9,7 @@ import okhttp3.RequestBody
 import okio.Buffer
 import retrofit2.Converter
 
-class MoshiFormRequestBodyConverter<T : Any>(
+class MoshiFormRequestBodyConverter<T>(
     private val adapter: JsonAdapter<T>,
     private val hasArrayIndex: Boolean,
 ) : Converter<T, RequestBody> {
@@ -28,7 +28,7 @@ class MoshiFormRequestBodyConverter<T : Any>(
 
     private fun FormBody.Builder.with(reader: JsonReader): FormBody.Builder {
         while (reader.peek() != JsonReader.Token.END_DOCUMENT) {
-            val entries = when (checkNotNull(reader.peek())) {
+            val entries = when (val token = checkNotNull(reader.peek())) {
                 JsonReader.Token.BEGIN_ARRAY -> {
                     reader.nextArray(ancestors = emptyList())
                 }
@@ -37,12 +37,40 @@ class MoshiFormRequestBodyConverter<T : Any>(
                 }
                 JsonReader.Token.END_ARRAY,
                 JsonReader.Token.END_OBJECT,
-                JsonReader.Token.NAME,
-                JsonReader.Token.STRING,
-                JsonReader.Token.NUMBER,
-                JsonReader.Token.BOOLEAN,
+                JsonReader.Token.NAME -> {
+                    throw JsonDataException("Unexpected token is detected ($token).")
+                }
+                JsonReader.Token.STRING -> {
+                    listOf(
+                        Entry(
+                            name = "",
+                            value = reader.nextString(),
+                        )
+                    )
+                }
+                JsonReader.Token.NUMBER -> {
+                    listOf(
+                        Entry(
+                            name = "",
+                            value = reader.nextLong().toString(),
+                        )
+                    )
+                }
+                JsonReader.Token.BOOLEAN -> {
+                    listOf(
+                        Entry(
+                            name = "",
+                            value = reader.nextBoolean().toString(),
+                        )
+                    )
+                }
                 JsonReader.Token.NULL -> {
-                    throw JsonDataException("Unexpected token is detected.")
+                    listOf(
+                        Entry(
+                            name = "",
+                            value = reader.nextNull<String>().toString(),
+                        )
+                    )
                 }
                 JsonReader.Token.END_DOCUMENT -> {
                     throw IllegalStateException("Must not be reached here.")
