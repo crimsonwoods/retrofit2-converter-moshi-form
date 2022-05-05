@@ -30,7 +30,7 @@ class MoshiFormRequestBodyConverter<T : Any>(
         while (reader.peek() != JsonReader.Token.END_DOCUMENT) {
             val entries = when (checkNotNull(reader.peek())) {
                 JsonReader.Token.BEGIN_ARRAY -> {
-                    TODO("Support array")
+                    reader.nextArray(ancestors = emptyList())
                 }
                 JsonReader.Token.BEGIN_OBJECT -> {
                     reader.nextObject(ancestors = emptyList())
