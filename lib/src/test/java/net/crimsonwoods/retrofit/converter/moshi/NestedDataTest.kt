@@ -50,8 +50,8 @@ class NestedDataTest {
                 """name=${"John Doe".encode()}""",
                 """webSiteUrl=${"https://www.example.com".encode()}""",
                 """${"place[name]".encode()}=${"test-place".encode()}""",
-                """${"place[location][latitude]".encode()}=0""",
-                """${"place[location][longitude]".encode()}=0""",
+                """${"place[location][latitude]".encode()}=0.0""",
+                """${"place[location][longitude]".encode()}=0.0""",
                 """address=${"東京都".encode()}""",
                 """note="""
             ),
