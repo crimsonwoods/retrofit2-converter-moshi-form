@@ -98,8 +98,8 @@ class MoshiFormRequestBodyConverter<T>(
                             listOf(Entry(name = names.name(), value = value.toString()))
                         }
                         JsonReader.Token.NUMBER -> {
-                            val value = nextLong()
-                            listOf(Entry(name = names.name(), value = value.toString()))
+                            val value = nextString()
+                            listOf(Entry(name = names.name(), value = value))
                         }
                         JsonReader.Token.STRING -> {
                             val value = nextString()
@@ -182,7 +182,7 @@ class MoshiFormRequestBodyConverter<T>(
                     listOf(
                         Entry(
                             name = (ancestors + name).name(),
-                            value = nextLong().toString()
+                            value = nextString()
                         )
                     )
                 }
