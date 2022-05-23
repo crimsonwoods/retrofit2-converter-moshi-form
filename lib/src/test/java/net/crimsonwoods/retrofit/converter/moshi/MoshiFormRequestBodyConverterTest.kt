@@ -50,6 +50,12 @@ class MoshiFormRequestBodyConverterTest {
                     "array[]" to "${Double.MIN_VALUE}"
                 )
             ),
+            Input(
+                input = InputDouble(0.0, emptyList()),
+                expected = listOf(
+                    "value" to "0.0",
+                )
+            ),
         )
 
         inputs.forEach { input ->
@@ -84,6 +90,10 @@ class MoshiFormRequestBodyConverterTest {
             Input(
                 input = InputLong(Long.MAX_VALUE, listOf(Long.MIN_VALUE)),
                 expected = listOf("value" to "${Long.MAX_VALUE}", "array[]" to "${Long.MIN_VALUE}")
+            ),
+            Input(
+                input = InputLong(0L, emptyList()),
+                expected = listOf("value" to "0")
             ),
         )
 
