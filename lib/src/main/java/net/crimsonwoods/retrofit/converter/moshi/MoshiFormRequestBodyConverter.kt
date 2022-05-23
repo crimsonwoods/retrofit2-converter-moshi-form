@@ -204,9 +204,11 @@ class MoshiFormRequestBodyConverter<T>(
                 }
                 JsonReader.Token.NAME,
                 JsonReader.Token.END_OBJECT,
-                JsonReader.Token.END_ARRAY,
                 JsonReader.Token.END_DOCUMENT -> {
                     throw JsonDataException("Unexpected token is detected.")
+                }
+                JsonReader.Token.END_ARRAY -> {
+                    emptyList()
                 }
             }
 
