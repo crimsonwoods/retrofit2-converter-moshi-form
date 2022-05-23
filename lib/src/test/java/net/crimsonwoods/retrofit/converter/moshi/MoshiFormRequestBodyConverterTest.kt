@@ -117,6 +117,19 @@ class MoshiFormRequestBodyConverterTest {
     }
 
     @Test
+    fun emptyArray() {
+        val converter = MoshiFormRequestBodyConverter(
+            adapter = moshi.adapter(Array<String>::class.java),
+            hasArrayIndex = false,
+        )
+
+        val actual = converter.convert(arrayOf())
+        assertNotNull(actual)
+        assertTrue(actual is FormBody)
+        assertEquals(0, actual.size)
+    }
+
+    @Test
     fun valueOnly() {
 
         val inputs = listOf<ValueOnlyInput<*>>(
